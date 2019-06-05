@@ -1,29 +1,71 @@
-// esta clase está completa, no necesita nada más
-class ProfesionalAsociado {
-	var universidad
+import Universidad.*
+import Empresa.*
+
+class Profesional {
+	var property universidad
+	var property totalRecaudado
 	
-	method universidad() { return universidad }
-	method universidad(univ) { universidad = univ }
+	method provinciasDondePuedeTrabajar()
 	
-	method provinciasDondePuedeTrabajar() { return #{"Entre Ríos", "Corrientes", "Santa Fe"} }
+	method honorariosPorHora()	
 	
-	method honorariosPorHora() { return 3000 }
+	method cobrar(cuanto)
 }
 
 
-// a esta clase le faltan métodos
-class ProfesionalVinculado {
-	var universidad
+class ProfesionalAsociado inherits Profesional {
 	
-	method universidad() { return universidad }
-	method universidad(univ) { universidad = univ }
+	override method provinciasDondePuedeTrabajar() { return #{"Entre Ríos", "Corrientes", "Santa Fe"} }
+	
+	override method honorariosPorHora() =  3000 
+	
+	override method cobrar(cuanto){
+		asociacionDeProfesionalesdelLitoral.totalRecaudado(cuanto)
+	}
+}
+
+object asociacionDeProfesionalesdelLitoral{
+	var property totalRecaudado = 0
+	
+	method cobrar(cuanto){
+		totalRecaudado += cuanto
+	}
 }
 
 
-// a esta clase le faltan atributos y métodos
-class ProfesionalLibre {
-	var universidad
+
+class ProfesionalVinculado inherits Profesional {
 	
-	method universidad() { return universidad }
-	method universidad(univ) { universidad = univ }
+	override method provinciasDondePuedeTrabajar() { return #{self.universidad().pronvincias()} }
+	
+	override method honorariosPorHora(){return self.universidad().honorariosRecomendados() }
+	
+	override method cobrar(cuanto){
+		universidad.donar(cuanto / 2)
+	}
+	
+	
+}
+
+class ProfesionalLibre inherits Profesional {
+	
+	var property pronvinciaDeTrabajo
+	var property honorariosPorHora = 0
+	
+	override method provinciasDondePuedeTrabajar(){
+		return pronvinciaDeTrabajo
+	}
+	
+	override method cobrar(cuanto){
+		totalRecaudado += cuanto
+	}
+	
+	method pasarDinero(quien, cuanto){
+		totalRecaudado -= (totalRecaudado - cuanto).max(0)
+		quien.cobrar(cuanto) 
+	}
+	
+	
+	
+	
 }

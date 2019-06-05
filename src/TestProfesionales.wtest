@@ -1,0 +1,60 @@
+import Empresa.*
+import profesionales.*
+import Universidad.*
+
+
+
+describe "Test" {
+		//Universidades
+		var sanMartin = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 3500)
+		var rosario = new Universidad(provincia = "Santa Fe", honorariosRecomendados = 2800)
+		var corrientes = new Universidad(provincia = "Corrientes", honorariosRecomendados = 4200)
+		var hurlingham = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8800)
+		
+		//Estudiantes
+		var juana = new ProfesionalVinculado(universidad = rosario)
+		var melina = new ProfesionalAsociado(universidad = corrientes)
+		var rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000, 
+			pronvinciaDeTrabajo = #{"Santa Fe", "Cordoba", "Buenos Aires"})
+		var luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200, 
+			pronvinciaDeTrabajo = #{"Santa Fe", "Entre Rios"})
+		
+		//Empresa
+		var pettinari = new Empresa(honorarioDeReferencia = 3500)
+		
+	fixture{
+		pettinari.contratarEmpleado(juana)
+		pettinari.contratarEmpleado(melina)
+		pettinari.contratarEmpleado(rocio)
+		pettinari.contratarEmpleado(luciana)		
+	}
+
+	
+	test "Empleados de Universidad" {
+		assert.equals(2, pettinari.empleadosDeUniversidad(rosario))
+		assert.equals(1, pettinari.empleadosDeUniversidad(hurlingham))
+		assert.equals(0, pettinari.empleadosDeUniversidad(sanMartin))
+	}
+	
+	test "Empleados caros"{
+		assert.equals(#{rocio}, pettinari.empleadosCaros())
+	}
+	
+	test "Universidades Formadoras"{
+		assert.equals(#{rosario, corrientes, hurlingham}, pettinari.universidadesDeLosEmpleados())
+	}
+	test "Profesional mas barato"{
+		assert.equals(juana, pettinari.personalMasBarato())
+	}
+
+	
+
+
+
+
+
+
+
+
+
+}
