@@ -1,0 +1,46 @@
+import Empresa.*
+import profesionales.*
+import Universidad.*
+import Solicitante.*
+
+
+
+describe "Cobros" {
+		//Universidades
+		var sanMartin = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 3500)
+		var rosario = new Universidad(provincia = "Santa Fe", honorariosRecomendados = 2800)
+		var corrientes = new Universidad(provincia = "Corrientes", honorariosRecomendados = 4200)
+		var hurlingham = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8800)
+		var utn = new Universidad(provincia = "Córdoba", honorariosRecomendados = 7000)
+		var uba = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8000)
+		
+		//Estudiantes
+		var juana = new ProfesionalVinculado(universidad = rosario)
+		var melina = new ProfesionalAsociado(universidad = corrientes)
+		var rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000, 
+			pronvinciaDeTrabajo = #{"Santa Fe", "Cordoba", "Buenos Aires"})
+		var luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200, 
+			pronvinciaDeTrabajo = #{"Santa Fe", "Entre Rios"})
+		
+		//Empresa
+		var pettinari = new Empresa(honorarioDeReferencia = 3500)
+			
+		var pepe = new Persona(provincia = "Buenos Aires")
+		var institucion = new Institucion(universidadesReconocidas = #{ "utn", "uba" })
+		
+	fixture{
+		pettinari.contratarEmpleado(juana)
+		pettinari.contratarEmpleado(melina)
+		pettinari.contratarEmpleado(rocio)
+		pettinari.contratarEmpleado(luciana)		
+	}
+	
+	test "Vinculados"{
+		juana.cobrar(500)
+		assert.equals(250,rosario.totalRecaudado())
+	}
+
+
+	
+	
+}

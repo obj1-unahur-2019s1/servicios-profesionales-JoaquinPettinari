@@ -3,7 +3,8 @@ import Empresa.*
 
 class Profesional {
 	var property universidad
-	var property totalRecaudado
+	var property totalRecaudado = 0
+	var property honorariosPorHora = 0
 	
 	method provinciasDondePuedeTrabajar()
 	
@@ -20,7 +21,7 @@ class ProfesionalAsociado inherits Profesional {
 	override method honorariosPorHora() =  3000 
 	
 	override method cobrar(cuanto){
-		asociacionDeProfesionalesdelLitoral.totalRecaudado(cuanto)
+		asociacionDeProfesionalesdelLitoral.cobrar(cuanto)
 	}
 }
 
@@ -36,9 +37,9 @@ object asociacionDeProfesionalesdelLitoral{
 
 class ProfesionalVinculado inherits Profesional {
 	
-	override method provinciasDondePuedeTrabajar() { return #{self.universidad().pronvincias()} }
+	override method provinciasDondePuedeTrabajar() { return #{self.universidad().provincia()} }
 	
-	override method honorariosPorHora(){return self.universidad().honorariosRecomendados() }
+	override method honorariosPorHora() {return self.universidad().honorariosRecomendados() }
 	
 	override method cobrar(cuanto){
 		universidad.donar(cuanto / 2)
@@ -50,18 +51,19 @@ class ProfesionalVinculado inherits Profesional {
 class ProfesionalLibre inherits Profesional {
 	
 	var property pronvinciaDeTrabajo
-	var property honorariosPorHora = 0
 	
 	override method provinciasDondePuedeTrabajar(){
 		return pronvinciaDeTrabajo
 	}
+	
+	override method honorariosPorHora(){ return honorariosPorHora }
 	
 	override method cobrar(cuanto){
 		totalRecaudado += cuanto
 	}
 	
 	method pasarDinero(quien, cuanto){
-		totalRecaudado -= (totalRecaudado - cuanto).max(0)
+		totalRecaudado = (totalRecaudado - cuanto).max(0)
 		quien.cobrar(cuanto) 
 	}
 	

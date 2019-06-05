@@ -1,60 +1,104 @@
 import Empresa.*
 import profesionales.*
 import Universidad.*
-
-
+import Solicitante.*
 
 describe "Test" {
-		//Universidades
-		var sanMartin = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 3500)
-		var rosario = new Universidad(provincia = "Santa Fe", honorariosRecomendados = 2800)
-		var corrientes = new Universidad(provincia = "Corrientes", honorariosRecomendados = 4200)
-		var hurlingham = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8800)
-		
-		//Estudiantes
-		var juana = new ProfesionalVinculado(universidad = rosario)
-		var melina = new ProfesionalAsociado(universidad = corrientes)
-		var rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000, 
-			pronvinciaDeTrabajo = #{"Santa Fe", "Cordoba", "Buenos Aires"})
-		var luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200, 
-			pronvinciaDeTrabajo = #{"Santa Fe", "Entre Rios"})
-		
-		//Empresa
-		var pettinari = new Empresa(honorarioDeReferencia = 3500)
-		
-	fixture{
+
+	// Universidades
+	var sanMartin = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 3500)
+	var rosario = new Universidad(provincia = "Santa Fe", honorariosRecomendados = 2800)
+	var corrientes = new Universidad(provincia = "Corrientes", honorariosRecomendados = 4200)
+	var hurlingham = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8800)
+	var utn = new Universidad(provincia = "Córdoba", honorariosRecomendados = 7000)
+	var uba = new Universidad(provincia = "Buenos Aires", honorariosRecomendados = 8000)
+	// Estudiantes
+	var juana = new ProfesionalVinculado(universidad = rosario)
+	var melina = new ProfesionalAsociado(universidad = corrientes)
+	var rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000, pronvinciaDeTrabajo = #{ "Santa Fe", "Cordoba", "Buenos Aires" })
+	var luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200, pronvinciaDeTrabajo = #{ "Santa Fe", "Entre Rios" })
+	// Empresa
+	var pettinari = new Empresa(honorarioDeReferencia = 3500)
+	
+	var pepe = new Persona(provincia = "Buenos Aires")
+	var carlos = new Persona(provincia = "Santa Fe")
+	var anses = new Institucion(universidadesReconocidas = #{ utn, uba })
+	var afip = new Institucion(universidadesReconocidas = #{ corrientes })
+
+	fixture {
 		pettinari.contratarEmpleado(juana)
 		pettinari.contratarEmpleado(melina)
 		pettinari.contratarEmpleado(rocio)
-		pettinari.contratarEmpleado(luciana)		
+		pettinari.contratarEmpleado(luciana)
+		
 	}
-
-	
+	/*
+	//Etapa 1
 	test "Empleados de Universidad" {
 		assert.equals(2, pettinari.empleadosDeUniversidad(rosario))
 		assert.equals(1, pettinari.empleadosDeUniversidad(hurlingham))
 		assert.equals(0, pettinari.empleadosDeUniversidad(sanMartin))
 	}
-	
-	test "Empleados caros"{
-		assert.equals(#{rocio}, pettinari.empleadosCaros())
+
+	test "Empleados caros" {
+		assert.equals(#{ rocio }, pettinari.empleadosCaros())
 	}
-	
-	test "Universidades Formadoras"{
-		assert.equals(#{rosario, corrientes, hurlingham}, pettinari.universidadesDeLosEmpleados())
+
+	test "Universidades Formadoras" {
+		assert.equals(#{ rosario, corrientes, hurlingham }, pettinari.universidadesDeLosEmpleados())
 	}
-	test "Profesional mas barato"{
+
+	test "Profesional mas barato" {
 		assert.equals(juana, pettinari.personalMasBarato())
 	}
 
+	test "Gente acotada" {
+		assert.that(pettinari.esGenteAcotada())
+		luciana.provinciasDondePuedeTrabajar().add("Corrientes")
+		luciana.provinciasDondePuedeTrabajar().add("Misiones")
+		assert.notThat(pettinari.esGenteAcotada())
+	}
+	//Etapa 2
+	test "Puede satisfacer" {
+		assert.notThat(pettinari.puedeSatisfacerAlCliente(institucion))
+	}
+
+	test "Puede satisfacer2" {
+		assert.that(pettinari.puedeSatisfacerAlCliente(pepe))
+	}
+	//Etapa 3
 	
-
-
-
-
-
-
-
-
-
+	test "Cobro Vinculados"{
+		juana.cobrar(500)
+		assert.equals(250,rosario.totalRecaudado())
+	}
+	test "Cobro Asociados"{
+		melina.cobrar(1000)
+		assert.equals(1000, asociacionDeProfesionalesdelLitoral.totalRecaudado())
+	}
+	test "Cobro Libres"{
+		luciana.cobrar(5000)
+		assert.equals(5000, luciana.totalRecaudado())
+	}
+	test"Pasar Plata"{
+		luciana.cobrar(5000)
+		luciana.pasarDinero(juana, 2000)
+		assert.equals(0, juana.totalRecaudado())
+		assert.equals(1000, rosario.totalRecaudado())
+		assert.equals(3000, luciana.totalRecaudado())
+		luciana.pasarDinero(rocio, 2000)
+		assert.equals(2000, rocio.totalRecaudado())
+		assert.equals(1000, luciana.totalRecaudado())
+	}*/
+	//Etapa 4
+	test "Servicios"{
+		pettinari.darServicio(afip)
+		pettinari.darServicio(anses)
+		pettinari.darServicio(carlos)	
+		assert.equals(juana, pettinari.empleado(afip))
+		
+//		assert.equals(3000, asociacionDeProfesionalesdelLitoral.totalRecaudado())
+		
+	}
 }
+

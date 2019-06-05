@@ -1,38 +1,73 @@
 class Empresa {
-	const property empleados = #{} 
+
+	const property empleados = #{}
 	var property honorarioDeReferencia = 0
-	
-	method contratarEmpleado(quien){
+	const clientes = #{}
+
+	method contratarEmpleado(quien) {
 		empleados.add(quien)
 	}
-	
-	method empleadosDeUniversidad(universidad){
-		return empleados.count{ empleado => 
-			empleado.universidad().equals(universidad)
-		}
+
+	method empleadosDeUniversidad(universidad) {
+		return empleados.count{ empleado => empleado.universidad().equals(universidad) }
 	}
-	
-	method empleadosCaros(){
-		return empleados.filter{ empleado => 
-			empleado.honorariosPorHora() > honorarioDeReferencia
-		}.asSet()
+
+	method empleadosCaros() {
+		return empleados.filter{ empleado => empleado.honorariosPorHora() > honorarioDeReferencia }.asSet()
 	}
-	
-	method universidadesDeLosEmpleados(){
+
+	method universidadesDeLosEmpleados() {
 		return empleados.map{ profesional => profesional.universidad() }.asSet()
 	}
-	
-	method esGenteAcotada(){
-		return empleados.all{ profesional => profesional.universidades().size() < 3}
+
+	method esGenteAcotada() {
+		return empleados.all{ profesional => profesional.provinciasDondePuedeTrabajar().size() <= 3 }
+	}
+
+	method personalMasBarato() {
+		return empleados.min{ empleado => empleado.honorariosPorHora() }
+	}
+
+	method puedeSatisfacerAlCliente(cliente) {
+		return empleados.any{ profesional => cliente.puedeSerAtendido(profesional) }
+	}
+
+	method empleado(cliente) { //anyOne
+		return empleados.find{ profesional => cliente.puedeSerAtendido(profesional) }
 	}
 	
-	method personalMasBarato(){
-		return empleados.min{ empleado => empleado.honorariosPorHora()}
+	method darServicioPara(quien){
+		if (self.puedeSatisfacerAlCliente(quien)) {
+			quien.recibirServicio(self.empleado(quien))
+			clientes.add(quien)
+		}
+		else{ "error"}
 	}
 	
-	method puedeSatisfacerAlCliente(cliente){
-		return empleados.any{ profesional => cliente.puedeSerAtendido(profesional) } 
+	method darServicio(quien) {
+		self.darServicioPara(quien)	
 	}
+	
+	method cuantosClientesTengo(){
+		return clientes.size()
+	}
+	
+	method tengoAEsteCliente(quien){
+		return clientes.contains(quien)
+	} 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
+

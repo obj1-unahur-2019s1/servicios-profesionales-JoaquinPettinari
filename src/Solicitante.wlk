@@ -1,6 +1,8 @@
 class Solicitante {
 
 	method puedeSerAtendido(profesional)
+	
+	method recibirServicio(empleado)
 
 }
 
@@ -11,7 +13,10 @@ class Persona inherits Solicitante {
 	override method puedeSerAtendido(profesional) {
 		return profesional.provinciasDondePuedeTrabajar().contains(provincia)
 	}
-
+	
+	override method recibirServicio(empleado){
+		empleado.cobrar(empleado.honorariosPorHora())
+	}
 }
 
 class Institucion inherits Solicitante {
@@ -20,6 +25,10 @@ class Institucion inherits Solicitante {
 
 	override method puedeSerAtendido(profesional) {
 		return universidadesReconocidas.contains(profesional.universidad())
+	}
+	
+	override method recibirServicio(empleado){
+		empleado.cobrar(empleado.honorariosPorHora())
 	}
 
 }
