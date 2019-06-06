@@ -54,7 +54,14 @@ class Empresa {
 	
 	method tengoAEsteCliente(quien){
 		return clientes.contains(quien)
-	} 
+	}
+	
+	method esPocoAtractivo(empleado){
+		return empleados.any{ profesional => 
+			(profesional.provinciasDondePuedeTrabajar() == empleado.provinciasDondePuedeTrabajar()) &&
+			(profesional.honorariosPorHora() < empleado.honorariosPorHora())
+		}
+	}
 	
 	
 	

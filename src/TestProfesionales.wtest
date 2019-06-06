@@ -21,7 +21,7 @@ describe "Test" {
 	var pettinari = new Empresa(honorarioDeReferencia = 3500)
 	
 	var pepe = new Persona(provincia = "Buenos Aires")
-	var carlos = new Persona(provincia = "Santa Fe")
+	var carlos = new Persona(provincia = "Buenos Aires")
 	var anses = new Institucion(universidadesReconocidas = #{ utn, uba })
 	var afip = new Institucion(universidadesReconocidas = #{ corrientes })
 
@@ -31,6 +31,7 @@ describe "Test" {
 		pettinari.contratarEmpleado(rocio)
 		pettinari.contratarEmpleado(luciana)
 		
+	
 	}
 	/*
 	//Etapa 1
@@ -91,14 +92,21 @@ describe "Test" {
 		assert.equals(1000, luciana.totalRecaudado())
 	}*/
 	//Etapa 4
-	test "Servicios"{
+	test "Dar servicio afip"{
 		pettinari.darServicio(afip)
-		pettinari.darServicio(anses)
-		pettinari.darServicio(carlos)	
-		assert.equals(juana, pettinari.empleado(afip))
+		assert.equals(melina, pettinari.empleado(afip))
+		assert.equals(3000, asociacionDeProfesionalesdelLitoral.totalRecaudado())
+//		assert.equals(1400, rosario.totalRecaudado())		
+	}
+	test "Dar servicio carlos"{
+		pettinari.darServicio(carlos)
+		assert.equals(5000, rocio.totalRecaudado())
+		assert.equals(1, pettinari.cuantosClientesTengo())
+	}
+	
+	test "Es poco atractivo"{
 		
-//		assert.equals(3000, asociacionDeProfesionalesdelLitoral.totalRecaudado())
-		
+		assert.that(pettinari.esPocoAtractivo(juana))
 	}
 }
 
